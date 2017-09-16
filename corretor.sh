@@ -3,7 +3,7 @@
 
 #Instructions
 #For student: put this script at your source file folder and run as bash corretor.sh
-#For teacher: use avaliar function for each question avaliar $1 $2 $3
+#For professor: use avaliar function for each question avaliar $1 $2 $3
 #	where 	$1: the question ID (usually q1, q2, q3)
 #			$2:	the input
 #			$3: the expected output (use \n as newline)
