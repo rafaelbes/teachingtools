@@ -1,0 +1,86 @@
+\documentclass[twoside]{article}
+\RequirePackage[a4paper,top=2cm,left=1cm,right=1cm]{geometry}
+
+\usepackage{setspace, tocloft}
+\usepackage{pdfpages}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[portuguese]{babel}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{multicol}
+
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[RE,LO]{\thepage}
+\fancyhead[LE,RO]{NOME DO EVENTO}
+
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\makeatletter
+\def\@pnumwidth{2em}
+\makeatother
+
+\def\blankpage{%
+\clearpage%
+\thispagestyle{empty}%
+\addtocounter{page}{-1}%
+\null%
+\clearpage}
+
+\begin{document}
+
+\includepdf[pages=1-]{pdfdacapa.pdf}
+
+\blankpage
+
+\includepdf[pages=1-]{pdfdafolhaderosto.pdf}
+\includepdf[pages=1-]{pdfdafichacatalografica.pdf}
+
+
+\pagenumbering{roman}
+
+\topskip2cm
+\section*{Mensagem dos organizadores}
+
+Bla Bla Bla
+
+
+\blankpage
+
+\Large \centering{\textbf{Comitê Organizador Local}}\\
+\normalsize 
+\begin{multicols}{2}
+	Fulano (UFRN)\\
+	Beltrano (UFRN)\\
+\end{multicols}
+
+\Large \textbf{Comitê Diretor}\\
+\normalsize
+\begin{multicols}{2}
+	Fulano (UFRN)\\
+	Beltrano (UFRN)\\
+\end{multicols}
+
+\Large \centering{\textbf{Comitê de Programa}}\\
+\normalsize 
+
+\begin{multicols}{2}
+	Fulano (UFRN)\\
+	Beltrano (UFRN)\\
+\end{multicols}
+\blankpage
+
+\renewcommand{\contentsname}{Sumário}
+\tableofcontents
+\newpage
+
+\pagenumbering{arabic}
+
+%para cada artigo, coloque as seguintes 3 linhas, um após o outro
+\phantomsection
+\addcontentsline{toc}{section}{Nome do artigo}
+\includepdf[pagecommand={\thispagestyle{fancy}},pages=1-]{pdfdoartigo.pdf}
+
+
+\end{document}
