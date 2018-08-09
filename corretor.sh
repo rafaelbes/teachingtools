@@ -1,5 +1,6 @@
 #!/bin/bash
 
+criarSumario=true
 declare -A sumarioAcertos
 declare -A sumarioTotal
 declare -A sumarioStatus
@@ -23,13 +24,14 @@ avaliar () {
 		sumarioAcertos[$1]=0
 	fi
 	if [ -f $file.c ]; then
-		charset="$(file -bi "$file.c" | awk -F "=" '{print $2}')"
-		if [ "$charset" != utf-8 ]; then
-			iconv -f "$charset" -t utf8 "$file.c" -o tmp.c
-			mv tmp.c "$file.c"
-		fi
 		if [ ! -f exec$file ]; then
-			if ! gcc $file.c -o exec$file -lm  2> /dev/null; then
+			charset="$(file -bi "$file.c" | awk -F "=" '{print $2}')"
+			arq=$file.c
+			if [ "$charset" != utf-8 ]; then
+				iconv -f "$charset" -t utf8 "$file.c" -o tmp.c
+				arq=tmp.c
+			fi
+			if ! gcc $arq -o exec$file -lm  2> /dev/null; then
 				sumarioStatus[$1]='código '$file.c' não compila'
 			fi
 		fi
@@ -144,7 +146,8 @@ if [ $totalQuestoes -ne 0 ]; then
 fi
 
 #cria um arquivo csv no diretorio superior (interessante para montar uma planilha)
-echo $sumario >> ../sumario.csv
+if [ "$criarSumario" = true ]; then
+	echo $sumario >> ../sumario.csv
+fi
 
 rm gabarito input output exec*
-
