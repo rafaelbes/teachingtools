@@ -10,6 +10,11 @@ else
 		mkdir output
 	fi
 	filename=$1
-	pdflatex -output-directory=./output/ $filename.tex
-	evince ./output/$filename.pdf &
+	if [ -f $filename.tex ] ; then
+		pdflatex -output-directory=./output/ $filename.tex
+		evince ./output/$filename.pdf &
+	else
+		pdflatex -output-directory=./output/ $filename
+		evince ./output/${filename%.tex}.pdf &
+	fi
 fi
