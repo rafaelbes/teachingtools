@@ -1,46 +1,71 @@
-#!/bin/bash
-
-#this script unzip all zip files inside current directory to a folder with same name (only letters)
-#copy the script corrigir.sh (please modify if it is another one) to each folder
-#and move all files inside a folder inside zip file to its parent
-
-rm output
+shopt -s nullglob
 
 if whiptail --yesno "Gostaria de apagar os diretórios existentes?" 25 40; then
 	for i in *; do
 		if [ -d "$i" ]; then
-			echo "apagando " $i
 			rm "$i" -rf
 		fi
 	done;
 fi
 
+if whiptail --yesno "Criar um diretorio para cada questao?" 25 40; then
+	qtd=$(whiptail --inputbox "Quantas questoes? (ex.: 10, 11)" 8 78 4 3>&1 1>&2 2>&3)
+	for i in $(seq 1 $qtd); do
+		mkdir q$i 2> /dev/null
+	done;
+fi
+
+copiarQuestoes=$(whiptail --yesno "Copiar codigos para diretorios de questoes?" 25 40 3>&1 1>&2 2>&3; echo $?)
+nomeScript=$(whiptail --inputbox "Nome do script" 8 78 corrigir.sh 3>&1 1>&2 2>&3)
+executarScript=$(whiptail --yesno "Executar script?" 25 40 3>&1 1>&2 2>&3; echo $?)
+
+echo $copiarQuestoes
+echo $nomeScript
+echo $qtd
+
 avaliar () {
 	j=$1
-	#change this file if needed
-	cp corrigir.sh $j
-	echo 'entrando em ' $j
 	cd $j
 	for f in *; do
 		if [ -d "$f" ]; then
-			echo "movendo conteúdo de $j para diretório superior"
 			mv "$f"/* .
 		fi
 	done;
-	#uncomment if youd like to apply the script, read for pause between each one
-	#bash corrigir.sh
-	#read
+	cp $nomeScript $j 2> /dev/null
+	if [ "$executarScript" -eq "0" ]; then
+		bash $nomeScript
+	fi
+	if [ "$copiarQuestoes" -eq "0" ]; then
+		for k in $(seq 1 $qtd); do
+			cp q$k.c ../q$k/$j.c 2> /dev/null
+		done
+	fi
 	cd ..
 }
 
+for i in *.tar.gz; do
+	j=a$(echo $i|sed 's/[^A-Za-z]//g' | perl -ne 'print lc')
+	if [ ! -d "$j" ]; then
+		mkdir $j
+		tar -xzvf "$i" -C $j > /dev/null
+	fi
+	avaliar $j
+done;
 
 for i in *.zip; do
-	j=$(echo $i|sed 's/[^A-Za-z]//g')
+	j=a$(echo $i|sed 's/[^A-Za-z]//g' | perl -ne 'print lc')
 	if [ ! -d "$j" ]; then
-		echo "descompactando " $i
 		mkdir $j
 		unzip "$i" -d $j > /dev/null
 	fi
 	avaliar $j
 done;
 
+for i in *.rar; do
+	j=a$(echo $i|sed 's/[^A-Za-z]//g' | perl -ne 'print lc')
+	if [ ! -d "$j" ]; then
+		mkdir $j
+		unrar-free "$i" "$j" > /dev/null
+	fi
+	avaliar $j
+done;
