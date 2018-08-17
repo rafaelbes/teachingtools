@@ -31,7 +31,7 @@ avaliar () {
 			mv "$f"/* .
 		fi
 	done;
-	cp $nomeScript $j 2> /dev/null
+	cp ../$nomeScript . 2> /dev/null
 	if [ "$executarScript" -eq "0" ]; then
 		bash $nomeScript
 	fi
