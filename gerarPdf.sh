@@ -11,8 +11,15 @@ if [ -z "$1" ]; then
 else
 	ext="${1#*.}"
 	if [[ "$ext" == "md" ]]; then
-		pandoc $1 -o ${1%.md}.pdf -V geometry:margin=1in
-		evince ${1%.md}.pdf &
+		read -p "Slides? (Y/y/any)" -n 1 -r </dev/tty
+		echo ""
+		if [[ $REPLY =~ ^[Yy]$ ]]; then
+			pandoc $1 -o ${1%.md}.pdf -t beamer --pdf-engine=xelatex
+			evince ${1%.md}.pdf &
+		else
+			pandoc $1 -o ${1%.md}.pdf -V geometry:margin=1in
+			evince ${1%.md}.pdf &
+		fi
 	else
 		if [ ! -d output ]; then
 			mkdir output
