@@ -1,0 +1,155 @@
+\ProvidesPackage{beamerthemeufrn}[2023/01/06]
+
+\RequirePackage{etoolbox}
+\RequirePackage{tikz}
+\RequirePackage{geometry}
+\RequirePackage{graphicx}
+\RequirePackage{xcolor}
+\RequirePackage{caladea,carlito}
+
+\geometry{paperwidth=16cm,paperheight=9cm}
+\renewcommand{\familydefault}{\sfdefault}
+
+\usepackage{hyperref}
+\hypersetup{linkcolor=corprincipal}
+
+\pgfdeclareimage[width=0.07\paperwidth]{logo}{ufrn0}
+\pgfdeclareimage[width=0.07\paperwidth]{whitelogo}{ufrn1}
+\newcommand{\@logo}{logo}
+\newcommand{\@topo}{topo}
+
+% defina as cores
+\definecolor{corprincipal}{RGB}{22,65,148}
+\definecolor{ufrngrey}{RGB}{235,235,230}
+\colorlet{ufrngray}{ufrngrey}
+\definecolorset{RGB}{ufrn}{}{lightgreen,0,157,67;green,17,137,56;darkgreen,12,102,47;yellow,255,204,0}
+\definecolorset{HTML}{ufrn}{}{lightgrey, D8D0C7}
+\colorlet{ufrnlightgray}{ufrnlightgrey}
+
+\setbeamertemplate{navigation symbols}{}
+
+\setbeamertemplate{footline}{%
+%\setbeamertemplate{headline}{\hspace{0.06\textwidth}\pgfuseimage{\@logo}}
+  \begin{beamercolorbox}[wd=\textwidth,ht=5mm,dp=3mm,rightskip=1cm,leftskip=1cm]{footline}
+  \insertframenumber/\inserttotalframenumber
+  \hfill
+	\pgfuseimage{\@logo}
+  \end{beamercolorbox}
+}
+
+\newcommand{\footlinecolor}[1]{% if #1 is empty, makes footline transparent
+  \ifstrempty{#1}{%
+    \setbeamercolor{footline}{fg=darkgray, bg=}
+    \setbeamercolor{block title}{fg=white,bg=corprincipal}
+    \setbeamercolor{block body}{fg=white,bg=corprincipal}
+  }{
+    \setbeamercolor{footline}{fg=white,bg=#1}
+    \setbeamercolor{block title}{fg=white,bg=#1}
+    \setbeamercolor{block body}{fg=white,bg=#1}
+  }%
+}
+\footlinecolor{ufrngray} % Default: no footline
+
+\newcommand{\topoSlide}[1]{
+	\ifstrequal{#1}{toc}{
+		\renewcommand{\@topo}{toc}
+	}{
+		\renewcommand{\@topo}{}
+	}
+}
+
+\newcommand{\themecolor}[1]{
+	\ifstrequal{#1}{main}{%
+        \setbeamercolor{footline}{fg=white,bg=corprincipal}
+		\setbeamercolor{normal text}{fg=white,bg=corprincipal}
+		\setbeamercolor{structure}{fg=white}
+		\renewcommand{\@logo}{whitelogo}
+		\setbeamercolor{block title}{fg=white,bg=corprincipal}
+		\setbeamercolor{block body}{fg=darkgray,bg=ufrngrey}
+	}{%
+        \setbeamercolor{footline}{fg=darkgray}
+		\setbeamercolor{normal text}{fg=darkgray,bg=white}
+		\setbeamercolor{structure}{fg=corprincipal}
+		\renewcommand{\@logo}{logo}
+		\setbeamercolor{block title}{fg=white,bg=corprincipal}
+		\setbeamercolor{block body}{fg=darkgray,bg=ufrngrey}
+	}
+}
+\themecolor{white} % Default: white theme
+\topoSlide{}
+
+\setbeamercolor{title}{fg=corprincipal,bg=white}
+\setbeamercolor{alerted text}{fg=ufrnyellow}
+\setbeamercolor{author}{fg=black}
+\setbeamercolor{date}{fg=black}
+
+\setbeamerfont{author}{size=\scriptsize}
+\setbeamerfont{date}{size=\tiny}
+\setbeamerfont{title}{series=\bfseries}
+\setbeamerfont{subtitle}{series=\mdseries,size=\footnotesize}
+\setbeamerfont{frametitle}{series=\bfseries}
+\setbeamerfont{framesubtitle}{series=\mdseries}
+\setbeamerfont{footline}{size=\scriptsize}
+\setbeamerfont{block title}{series=\centering\bfseries}
+
+% Code to get prettier boxes
+\setbeamertemplate{blocks}[rounded]
+
+% Bullets in several levels
+\setbeamertemplate{itemize item}{\textbullet}
+\setbeamertemplate{itemize subitem}{\textemdash}
+\setbeamertemplate{itemize subsubitem}{\ensuremath{\circ}}
+
+\newenvironment{colorblock}[3][white]{%
+	\begingroup
+	\setbeamercolor{block title}{fg=#1,bg=#2}
+	\setbeamercolor{block body} {fg=#1,bg=#2}
+	\begin{block}{#3}
+	}{%
+	\end{block}
+	\endgroup
+}
+
+% Put the logo in each slide's top left area
+%\setbeamertemplate{headline}{\hspace{0.06\textwidth}\pgfuseimage{\@logo}}
+
+% Define frame title and subtitle layout
+\setbeamertemplate{frametitle}{%
+  \vspace*{1.5ex}
+  \begin{beamercolorbox}[leftskip=0.0cm]{frametitle}%
+	\expandafter\ifstrequal\expandafter{\@topo}{}{\usebeamerfont{frametitle}\insertsection\\\usebeamerfont{framesubtitle}\insertframetitle }{Conteúdo da aula}
+  \end{beamercolorbox}
+}
+
+\setbeamertemplate{title page}{%
+  \begin{beamercolorbox}[wd=0.72\textwidth,sep=10pt,leftskip=2mm]{title}%
+    {\usebeamerfont{title}\inserttitle}
+    {\usebeamerfont{subtitle}\insertsubtitle}\\
+    {\usebeamerfont{author}\usebeamercolor[fg]{author}\textbf{\insertauthor}}\\
+    {\usebeamerfont{date}\usebeamercolor[fg]{date}\insertdate}
+  \end{beamercolorbox}
+}
+
+% Overwrite the maketitle command for the title page
+\renewcommand{\maketitle}{
+\begingroup
+  \begin{frame}%
+  \titlepage%
+  \end{frame}%
+\endgroup
+}
+
+% Define sectioning and table of contents
+\AtBeginSection[]
+{
+    \begingroup
+    \themecolor{main}
+	\topoSlide{toc}
+	\begin{frame}{Conteúdo da aula}
+		\begin{NoHyper}
+        \tableofcontents[currentsection]
+		\end{NoHyper}
+    \end{frame}
+    \endgroup
+}
+\setbeamertemplate{section in toc}{$\blacktriangleright$~\inserttocsection}
