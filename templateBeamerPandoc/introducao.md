@@ -4,7 +4,7 @@ author: "Rafael Beserra"
 institute: "UFRN"
 topic: "Introdução à disciplina"
 fonttheme: "professionalfonts"
-fontsize: 12pt
+fontsize: 9pt
 urlcolor: blue
 linkstyle: bold
 md_extensions: +fenced_divs
@@ -30,6 +30,24 @@ header-includes:
 ## Mais outro slide
 
 Conteúdo para este slide
+
+- O template é um recurso da linguagem C++ para parametrizar tipo
+```c++
+//comentário
+template <class T>
+T maior(T a, T b) {
+	return a > b ? a : b;
+}
+
+int main() {
+	int ai = 3, bi = 4;
+	string as = "primeiro", bs = "segundo";
+	cout << maior<int>(ai, bi) << endl;
+	cout << maior<string>(as, bs) << endl;
+	return 0;
+}
+```
+
 
 ## Múltiplas colunas
 

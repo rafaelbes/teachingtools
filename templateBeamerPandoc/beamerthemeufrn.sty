@@ -6,6 +6,7 @@
 \RequirePackage{graphicx}
 \RequirePackage{xcolor}
 \RequirePackage{caladea,carlito}
+\RequirePackage{listings}
 
 \geometry{paperwidth=16cm,paperheight=9cm}
 \renewcommand{\familydefault}{\sfdefault}
@@ -21,10 +22,31 @@
 % defina as cores
 \definecolor{corprincipal}{RGB}{22,65,148}
 \definecolor{ufrngrey}{RGB}{235,235,230}
+\definecolor{ufrncodigo}{RGB}{61,62,77}
+\definecolor{ufrnblue}{RGB}{94,142,219}
 \colorlet{ufrngray}{ufrngrey}
-\definecolorset{RGB}{ufrn}{}{lightgreen,0,157,67;green,17,137,56;darkgreen,12,102,47;yellow,255,204,0}
+\definecolorset{RGB}{ufrn}{}{lightgreen,73,173,116;green,17,137,56;darkgreen,12,102,47;yellow,255,204,0}
 \definecolorset{HTML}{ufrn}{}{lightgrey, D8D0C7}
 \colorlet{ufrnlightgray}{ufrnlightgrey}
+
+\lstset{
+	basicstyle=\ttfamily\color{white}\scriptsize,
+	xleftmargin=0.1cm,
+	framexleftmargin=0.2cm,
+	framextopmargin=0.2cm,
+	backgroundcolor=\color{ufrncodigo},
+    commentstyle=\color{ufrnyellow},
+    keywordstyle=\color{ufrnlightgreen},
+    frame=none,
+    language=c++,
+    morekeywords={True, False},
+    numbers=left,
+    numbersep=0.4cm,
+    numberstyle=\scriptsize\color{Gray},
+    showstringspaces=false,
+    stringstyle=\color{ufrnblue},
+    tabsize=3
+}
 
 \setbeamertemplate{navigation symbols}{}
 
