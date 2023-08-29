@@ -11,14 +11,18 @@ if [ -z "$1" ]; then
 else
 	ext="${1#*.}"
 	if [[ "$ext" == "md" ]]; then
-		read -p "Slides? (Y/y/any)" -n 1 -r </dev/tty
-		echo ""
-		if [[ $REPLY =~ ^[Yy]$ ]]; then
-			pandoc $1 -o ${1%.md}.pdf -t beamer --pdf-engine=xelatex
-			evince ${1%.md}.pdf &
-		else
+		if [ "$2" = "quiet" ]; then
 			pandoc $1 -o ${1%.md}.pdf -V geometry:margin=1in
-			evince ${1%.md}.pdf &
+		else
+			read -p "Slides? (Y/y/any)" -n 1 -r </dev/tty
+			echo ""
+			if [[ $REPLY =~ ^[Yy]$ ]]; then
+				pandoc $1 -o ${1%.md}.pdf -t beamer --pdf-engine=xelatex --listings --slide-level=2
+				evince ${1%.md}.pdf &
+			else
+				pandoc $1 -o ${1%.md}.pdf -V geometry:margin=1in
+				evince ${1%.md}.pdf &
+			fi
 		fi
 	else
 		if [ ! -d output ]; then
